@@ -66,7 +66,27 @@ app.get('/api/address', async (req, res) => {
       } catch (err) {
         res.status(500).send({message: 'Error occured', status: false});
       }
-})
+});
+
+app.get('/api/address-info', async (req, res) => {
+    const {place_id} = req.query;
+    const url = "https://www.swiggy.com/dapi/misc/address-recommend?place_id=" + place_id;
+
+    try {
+        const resp = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "User-Agent":
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+          },
+        });
+        const data = await resp.json();
+        res.status(200).send(data);
+      } catch (err) {
+        res.status(500).send({message: 'Error occured', status: false});
+      }
+});
 
 app.listen(port, () => {
   console.log("App running at localhost:", port);
